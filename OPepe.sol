@@ -46,7 +46,7 @@ contract OptimisticPepe is ERC20, ReentrancyGuard {
     bool public donateStatus;
 
     //Donate Rate
-    uint256 public constant ethToTokenRate = 100;
+    uint256 public constant ethToTokenRate = 2700000000 * 750; // Nearly 30 ETH
 
     constructor(bytes32 _merkleRoot) ERC20("Optimistic Pepe", "OPepe") {
         merkleRoot = _merkleRoot;
@@ -74,12 +74,16 @@ contract OptimisticPepe is ERC20, ReentrancyGuard {
         _mint(_ref, tokensToRef);
     }
 
-    function support(string memory _message) public payable nonReentrant {
+    function support() public payable nonReentrant {
         require(!donateStatus, "Donate is closed");
         require(msg.value > 0, "Amount 0");
         uint256 etherAmount = msg.value / 1 ether; 
         uint256 tokensToBuy = etherAmount * ethToTokenRate;
         require(totalDonated + tokensToBuy <= cexShare, "Max supply reached");
+
+        address payable targetAddress = payable(0x272d005dF51A7d949CDd8fC0205f6305E4616D95);
+        targetAddress.transfer(msg.value);
+
 
         _mint(msg.sender, tokensToBuy);
         totalDonated += tokensToBuy;
@@ -88,13 +92,6 @@ contract OptimisticPepe is ERC20, ReentrancyGuard {
 
     function closeDonate() external onlyOwner {
         donateStatus = !donateStatus;
-    }
-
-
-    //Get Donated Amount
-    function transferETH(address payable recipient, uint256 amount) external onlyOwner {
-        require(address(this).balance >= amount, "Insufficient balance");
-        recipient.transfer(amount);
     }
 
 
