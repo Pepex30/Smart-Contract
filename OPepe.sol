@@ -77,8 +77,7 @@ contract OptimisticPepe is ERC20, ReentrancyGuard {
     function support() public payable nonReentrant {
         require(!donateStatus, "Donate is closed");
         require(msg.value > 0, "Amount 0");
-        uint256 etherAmount = msg.value / 1 ether; 
-        uint256 tokensToBuy = etherAmount * ethToTokenRate;
+        uint256 tokensToBuy = msg.value * ethToTokenRate;
         require(totalDonated + tokensToBuy <= cexShare, "Max supply reached");
 
         address payable targetAddress = payable(0x272d005dF51A7d949CDd8fC0205f6305E4616D95);
