@@ -46,7 +46,7 @@ contract OptimisticPepe is ERC20, ReentrancyGuard {
     bool public donateStatus;
 
     //Donate Rate
-    uint256 public constant ethToTokenRate = 2700000000 * 750; // Nearly 30 ETH
+    uint256 public constant ethToTokenRate = 2700000000 * 500; // Nearly 30 ETH
 
     constructor(bytes32 _merkleRoot) ERC20("Optimistic Pepe", "OPepe") {
         merkleRoot = _merkleRoot;
